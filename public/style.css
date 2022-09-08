@@ -143,11 +143,17 @@ span.icon{
 span.icon-choose{
     background:url(./svgs/space.svg) no-repeat;
 }
-span.icon-success{
-    background: url(./svgs/成功.svg) no-repeat;
+span.icon-passed{
+    background: url(./svgs/passed.svg) no-repeat;
 }
 span.icon-failed{
     background:url(./svgs/failed.svg) no-repeat;
+}
+span.icon-interrupt{
+    background:url(./svgs/interrupt.svg) no-repeat;
+}
+span.icon-waiting{
+    background:url(./svgs/waiting.svg) no-repeat;
 }
 span.icon-run{
     background: url(./svgs/run.svg) no-repeat;

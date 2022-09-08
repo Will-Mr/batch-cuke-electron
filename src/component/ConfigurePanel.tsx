@@ -7,9 +7,11 @@ export interface ConfigurePanelStates{
     checkAll?: boolean,
     command?: string
 }
+export type ProjectStatus = "" | "passed" | "failed" | "interrupt" 
 export interface ProjectInfo{
     path: string
     checked?: boolean
+    status?: ProjectStatus
     lastReport?: string
 }
 export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePanelStates> {
@@ -39,6 +41,7 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
             if(project.checked){
                 return `cd /d ${project.path} && cuke --run --format html --format json --no-color -o reports`
             }
+            return "";
         })
         const initCommand = `chcp 65001`
         commandList.unshift(initCommand);
@@ -55,7 +58,8 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
         const command = this.generateCommand(projects)
         this.setState({
             projects: projects,
-            command: command
+            command: command,
+            checkAll: this.isAllChecked(projects)
         })
     }
     handleCheckAll = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,6 +121,24 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
             })
         }
     }
+    handleDeleteItem = (projectPath:string, event: React.MouseEvent) => {
+        const projects = this.state.projects;
+        const index = projects.findIndex((project) => project.path === projectPath)
+        projects.splice(index, 1);
+        this.setState({
+            projects: projects
+        })
+    }
+    handleRunItem = async (projectPath:string, event: React.MouseEvent) => {
+        const projects = this.state.projects;
+        const index = projects.findIndex((project) => project.path === projectPath)
+        const result = await window.electronAPI.runProject(projects[index])
+        projects[index].lastReport = result.reportPath;
+        projects[index].status = result.status;
+        this.setState({
+            projects: projects
+        })
+    }
     renderHeader = () => {
         return (
             <div className="items">
@@ -141,9 +163,9 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
     }
     renderProjectsList = (projects:ProjectInfo[]) => {
         return projects.map((project, index) => {
-            if(!project.path) return;
+            if(!project.path) return "";
             return (
-                <div className="items" key={index}>
+                <div className="items" key={project.path}>
                     <div className="item-checkbox">
                         <span className="icon icon-drag"></span>
                         {
@@ -153,17 +175,15 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
                     <div className="item-path">
                         <span>{project.path}</span>
                     </div>
-                    <div className="item-status">
-                        <span className="icon icon-success"></span>
-                    </div>
+                    <ProjectStatusIcon status={project.status}/>
                     <div className="item-result">
                         <span>{project.lastReport}</span>
                     </div>
                     <div className="item-controller">
                         <div className="icon">
-                          <span className="icon icon-run"></span>
+                          <span className="icon icon-run" onClick={(e) => this.handleRunItem(project.path, e)}></span>
                         </div>
-                        <div className="icon">
+                        <div className="icon" onClick={(e) => this.handleDeleteItem(project.path, e)}>
                             <span className="icon icon-delete"></span>
                         </div>
                         <div className="icon">
@@ -230,4 +250,18 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
             </div>
         )
     }
+}
+
+function ProjectStatusIcon(props:{status?:ProjectStatus}){
+    const iconNameMap = {
+        "passed": "passed",
+        "failed": "failed",
+        "interrupt": "interrupt"
+    }
+    let iconName = props.status ? iconNameMap[props.status] : "waiting"
+    return (
+        <div className="item-status">
+            <span className={`icon icon-${iconName}`}></span>
+        </div>
+    )
 }
