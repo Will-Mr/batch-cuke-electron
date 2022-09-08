@@ -1,0 +1,246 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+div.main-content{
+    min-width: 800px;
+}
+div.run-manager{
+    height: 28px;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    border-bottom: 1px solid #bbbbbb;
+}
+div.bold{
+    font-weight: 600;
+}
+div.icon{
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    margin-right: 3px;
+}
+
+div.run-config-items{
+    position: absolute;
+    top: 33px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 10px ;
+}
+div.config-items{
+    display: flex;
+    flex-direction: column;
+}
+div.items{
+    display: flex;
+    align-items: center;
+    border: 1px solid #bbbbbb;
+    border-top: none;
+}
+div.config-items>div.items:first-child{
+    border-top: 1px solid #bbbbbb;
+}
+div.items > div {
+    height: 26px;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-right: 1px solid #bbbbbb;
+    box-sizing: content-box;
+}
+
+div.items > div:last-child{
+    border: none;
+}
+div.item-checkbox{
+    width: 40px;
+    min-width: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 0px !important;
+}
+
+div.item-path{
+    cursor: pointer;
+    width: 300px;
+    min-width: 300px
+}
+div.item-result{
+    flex-grow: 1;
+    min-width: 300px;
+    
+}
+
+div.item-path > span{
+    color: #007acc;
+    font-style: italic;
+    text-decoration:underline;
+}
+
+div.item-path>span,
+div.item-result>span{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+div.item-status {
+    width: 40px;
+    min-width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+div.item-controller{
+    margin-left: auto;
+    width: 100px;
+    min-width: 100px;
+}
+
+div.item-controller>span{
+    margin-right: 6px;
+}
+
+div.config-command-bar{
+    display: flex;
+    flex-direction: row;
+}
+div.config-command-block{
+    background-color: silver;
+    width: 80%;
+    padding: 1em 3em;
+    display: flex;
+    border: 1px solid #000000;
+}
+.config-command-text{
+    overflow: hidden;
+}
+div.config-command-operate{
+    width: 5%;
+    display: flex;
+    flex-direction: column;
+}
+div.config-command-items{
+    display: flex;
+}
+span.icon{
+    width: 18px;
+    height: 18px;
+    background-size: 18px 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+span.icon-choose{
+    background:url(./svgs/space.svg) no-repeat;
+}
+span.icon-success{
+    background: url(./svgs/成功.svg) no-repeat;
+}
+span.icon-failed{
+    background:url(./svgs/failed.svg) no-repeat;
+}
+span.icon-run{
+    background: url(./svgs/run.svg) no-repeat;
+}
+span.icon-delete{
+    background: url(./svgs/delete.svg) no-repeat;
+}
+span.icon-insert{
+    background: url(./svgs/insert.svg) no-repeat;
+}
+span.icon-drag{
+    
+    background: url(./svgs/drag.svg) no-repeat;
+}
+span.icon-copy{
+    background: url(./svgs/copy.svg) no-repeat;
+}
+div.icon:hover{
+    background: #bbbbbb;
+    transition: .3s;
+}
+
+input[type="checkbox"]{
+    width: 14px;
+    height: 14px;
+}
+
+div.divider{
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid #bbbbbb;
+    margin: 10px 0;
+}
+
+p{
+    font-size: 16px;
+    margin: 8px 0;
+}
+div.run-result{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+div.result-summary{
+    display: flex;
+    flex-direction: row;
+    height: 36px;
+    align-items: center;
+    justify-content: space-between;
+}
+div.result-buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+div.result-buttons > div:first-child{
+    border-right: none;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+div.result-buttons > div:last-child{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+div.result-success-count,div.result-failed-count{
+    width: 100px;
+    border-radius: 2px;
+    border: 1px solid #007acc;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+div.result-detail{
+    display: flex;
+    flex-direction: column;
+}
+div.result-detail > div.result-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 28px;
+}
+div.result-item > div.item-1{
+    width: 33.33%;
+}
+div.result-item > div.item-2{
+    width: 66.66%;
+}
+div.result-title>span.href{
+    color: #007acc;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+}
