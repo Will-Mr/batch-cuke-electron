@@ -7,7 +7,7 @@ export interface ConfigurePanelStates{
     checkAll?: boolean,
     command?: string
 }
-export type ProjectStatus = "" | "passed" | "failed" | "interrupt" 
+export type ProjectStatus = "" | "passed" | "failed" | "interrupt"
 export interface ProjectInfo{
     path: string
     checked?: boolean
@@ -32,17 +32,17 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
         }else{
             return true
         }
-        
+
     }
     generateCommand = (projects?:ProjectInfo[]) => {
         projects = projects ? projects :this.state.projects
         const commandList = projects.filter(project => project.checked)
-        .map(project => {
-            if(project.checked){
-                return `cd /d ${project.path} && cuke --run --format html --format json --no-color -o reports`
-            }
-            return "";
-        })
+            .map(project => {
+                if(project.checked){
+                    return `cd /d ${project.path} && cuke --run --format html --format json --no-color -o reports`
+                }
+                return "";
+            })
         const initCommand = `chcp 65001`
         commandList.unshift(initCommand);
         const command = commandList.join(' && ')
@@ -139,7 +139,52 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
             projects: projects
         })
     }
+    handleImportData = async () => {
+        if (!window.electronAPI) {
+            return
+        } else {
+            let projects = this.state.projects
+            let fileData: any = await window.electronAPI.selectFile();
+            console.log('fileData',fileData);
+            if (fileData.type === '.json') {
+                projects = fileData.data
+            } else if (fileData.type === '.txt') {
+                let data = fileData.data
+                for (let i = 0; i < data.length; i++) {
+                    projects.push({
+                        path: data[i],
+                        checked: true
+                    })
+                }
+            }
+            const command = this.generateCommand(projects)
+            console.log('projects',projects);
+            this.setState({
+                projects: projects,
+                command: command
+            })
+        }
+    }
+    handleExportData = async () => {
+        if (!window.electronAPI) {
+            return
+        } else {
+            await window.electronAPI.saveFile(this.state.projects);
+        }
+    }
+    handleOpenFolder = async (event:any) => {
+        if (!window.electronAPI) {
+            return
+        } else {
+            console.log('path',event.target.innerText)
+            await window.electronAPI.openFolder(event.target.innerText);
+        }
+    }
     renderHeader = () => {
+        let importDom = document.getElementById('importData');
+        let exportDom = document.getElementById('exportData');
+        importDom?.addEventListener("click", this.handleImportData);
+        exportDom?.addEventListener("click", this.handleExportData);
         return (
             <div className="items">
                 <div className="item-checkbox">
@@ -172,7 +217,7 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
                             <input type="checkbox" name={index+''} onChange={this.handleCheck} checked={project.checked??false}/>
                         }
                     </div>
-                    <div className="item-path">
+                    <div className="item-path" onClick={(e) => this.handleOpenFolder(e)}>
                         <span>{project.path}</span>
                     </div>
                     <ProjectStatusIcon status={project.status}/>
@@ -181,7 +226,7 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
                     </div>
                     <div className="item-controller">
                         <div className="icon">
-                          <span className="icon icon-run" onClick={(e) => this.handleRunItem(project.path, e)}></span>
+                            <span className="icon icon-run" onClick={(e) => this.handleRunItem(project.path, e)}></span>
                         </div>
                         <div className="icon" onClick={(e) => this.handleDeleteItem(project.path, e)}>
                             <span className="icon icon-delete"></span>
@@ -234,7 +279,7 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
                     </div>
                 </div>
 
-                
+
             </div>
         )
     }
@@ -244,7 +289,7 @@ export class ConfigurePanel extends Component<ConfigurePanelProps, ConfigurePane
                 {this.renderHeader()}
                 {this.renderProjectsList(this.state.projects ?? [])}
                 {this.renderNewItemRow()}
-                
+
                 <div className="divider"></div>
                 {this.renderCommand()}
             </div>

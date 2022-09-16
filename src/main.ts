@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import {addNewItem, copyCommand, runCommand} from './utils'
+import {addNewItem, copyCommand, runCommand, importData, exportData, openFolder} from './utils'
 import {join} from 'path'
+import { ProjectInfo } from './component/ConfigurePanel'
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -19,6 +20,13 @@ function createWindow () {
 
 app.whenReady().then(() => {
   ipcMain.handle('select-path', addNewItem)
+  ipcMain.handle('select-file', importData)
+  ipcMain.handle('save-file', (event, data:ProjectInfo[]) => {
+    return exportData(data)
+  })
+  ipcMain.handle('open-folder', (event, data:string) => {
+    return openFolder(data)
+  })
   ipcMain.handle('copy-command', (event, command:string) => {
     return copyCommand(command)
   })

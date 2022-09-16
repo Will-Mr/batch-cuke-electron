@@ -171,6 +171,12 @@ span.icon-drag{
 span.icon-copy{
     background: url(./svgs/copy.svg) no-repeat;
 }
+span.icon-import{
+    background: url(./svgs/import.svg) no-repeat;
+}
+span.icon-export{
+    background: url(./svgs/export.svg) no-repeat;
+}
 div.icon:hover{
     background: #bbbbbb;
     transition: .3s;
